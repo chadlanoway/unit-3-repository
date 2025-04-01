@@ -1,12 +1,15 @@
 (function(){ //<-- this is a neat trick!
 
     //pseudo-global variables
-    var width = 860,
-        height = 560;
+   
     var colorScale, healthByCounty, map, projection, path;
     
     //set up choropleth map
     function setMap(){
+        //map frame dimensions
+        var width = window.innerWidth * 0.5,
+        height = 460;
+
         //map size
         map = d3.select("body")
             .append("svg")
@@ -32,6 +35,20 @@
         Promise.all(promises).then(callback);
     }
     
+    //function to create coordinated bar chart
+    function setChart(csvData, colorScale){
+         //chart frame dimensions
+        var chartWidth = window.innerWidth * 0.425,
+        chartHeight = 460;
+
+        //create a second svg element to hold the bar chart
+        var chart = d3.select("body")
+            .append("svg")
+            .attr("width", chartWidth)
+            .attr("height", chartHeight)
+            .attr("class", "chart");
+    };
+
     function callback(data) {
         //separate data, turn topojson to geojson, make a graticule
         var csvData     = data[0],
@@ -84,6 +101,8 @@
             .style("fill", "none")
             .style("stroke", "#000")
             .style("stroke-width", 0);
+
+        setChart(csvData, colorScale);
     }
     
     function setGraticule(map, path, graticule) {
